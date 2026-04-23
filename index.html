@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>寻境大庆 · 档案解谜</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap');
+:root{--paper:#f4e8d0;--paper-d:#e8d9b8;--ink:#2a1a10;--gold:#b8953a;--gold-l:#d4b86a;--red:#8b2635;--red-d:#5c1a23;--gray:#8a7e6b;--green:#4a9b4a;--bg:#1a0f0a;--panel:#2a1d15;--sh:0 4px 20px rgba(42,26,16,.4)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Serif SC',serif;background:var(--bg);color:var(--paper);overflow:hidden;height:100vh;user-select:none}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
+.hide{display:none!important}
+.btn{padding:.7rem 1.8rem;font-family:inherit;font-size:.95rem;cursor:pointer;border:2px solid var(--gold);color:var(--gold);background:transparent;border-radius:6px;letter-spacing:.12rem;transition:all .2s}
+.btn:hover{background:rgba(184,149,58,.2);transform:scale(1.03)}
+.btn-p{background:var(--red);color:#fff;border-color:var(--red);box-shadow:0 0 20px rgba(139,38,53,.4)}
+.btn-p:hover{background:var(--red-d)}
+.btn-s{padding:.35rem .8rem;font-size:.78rem;border-radius:4px}
+.ov{position:fixed;inset:0;z-index:100;background:rgba(13,8,5,.92);display:none;align-items:center;justify-content:center;overflow-y:auto;padding:1.5rem}
+.ov.open{display:flex}
+#ov{z-index:120}
+.pn{background:var(--panel);border:2px solid var(--gold);border-radius:10px;max-width:620px;width:94%;max-height:85vh;overflow-y:auto;position:relative;box-shadow:var(--sh)}
+.pn-h{background:linear-gradient(90deg,var(--ink),var(--panel));color:var(--gold);padding:.9rem 1.1rem;font-family:'ZCOOL XiaoWei',serif;font-size:1.15rem;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:.4rem}
+.pn-c{position:absolute;top:.7rem;right:.9rem;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer;transition:transform .2s}
+.pn-c:hover{transform:rotate(90deg)}
+.pn-b{padding:1.1rem;line-height:1.9;color:var(--paper);font-size:.9rem}
+.pn-f{display:flex;gap:.5rem;padding:.7rem 1.1rem;justify-content:center;border-top:1px solid rgba(184,149,58,.2)}
+#menu{position:fixed;inset:0;z-index:50;background:linear-gradient(180deg,#0d0805,#2a1a10 50%,#3d2b1f);display:flex;flex-direction:column;align-items:center;padding:2rem;overflow-y:auto}
+#menu h1{font-family:'ZCOOL XiaoWei',serif;font-size:3.8rem;color:var(--gold);text-shadow:0 0 40px rgba(184,149,58,.6);letter-spacing:.5rem;margin:2rem 0 .6rem}
+#menu .sub{font-size:1.1rem;color:var(--paper-d);letter-spacing:.3rem;margin-bottom:1.5rem}
+.sb{background:rgba(244,232,208,.07);border:1px solid var(--gold);padding:1.2rem 1.8rem;max-width:520px;text-align:center;line-height:2;margin-bottom:2rem;color:var(--gray);font-size:.9rem}
+.mb{display:flex;flex-direction:column;gap:.5rem;align-items:center}
+#topbar{position:fixed;top:0;left:0;right:0;height:48px;background:linear-gradient(180deg,#1a0f0a,var(--panel));display:flex;align-items:center;justify-content:space-between;padding:0 1rem;z-index:40;border-bottom:2px solid var(--gold)}
+.tb-t{color:var(--gold);font-weight:700;font-size:.9rem;letter-spacing:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:50vw}
+.tb-p{color:var(--gray);font-size:.78rem}
+.nv{width:32px;height:32px;border-radius:5px;background:rgba(184,149,58,.1);border:2px solid var(--gold);color:var(--gold);font-size:.95rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.nv:hover{background:var(--gold);color:var(--ink)}
+#archive{position:fixed;left:0;top:48px;bottom:0;width:250px;background:linear-gradient(90deg,#1a0f0a,var(--panel));border-right:2px solid var(--gold);z-index:30;padding:.8rem;overflow-y:auto;transition:transform .3s}
+.a-t{font-family:'ZCOOL XiaoWei',serif;font-size:1rem;color:var(--gold);margin-bottom:.4rem;padding-bottom:.3rem;border-bottom:2px solid var(--gold)}
+.a-c{font-size:.72rem;color:var(--gray);margin-bottom:.6rem}
+.cs{width:100%;min-height:50px;background:rgba(244,232,208,.05);border:1px solid var(--gray);border-radius:4px;margin-bottom:.4rem;display:flex;align-items:center;padding:.4rem .6rem;gap:.5rem;cursor:pointer;transition:all .2s;font-size:.78rem}
+.cs:hover{background:rgba(244,232,208,.1);border-color:var(--gold)}
+.cs.lk{opacity:.3;cursor:default;border-style:dashed}.cs.lk:hover{transform:none;background:rgba(244,232,208,.03)}
+.csi{width:34px;height:34px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.csi.common{background:linear-gradient(135deg,#6b5d4d,#4a3f32)}.csi.rare{background:linear-gradient(135deg,#3a6b8a,#1e4a6b)}.csi.epic{background:linear-gradient(135deg,#6b3a8a,#4a2570)}.csi.legendary{background:linear-gradient(135deg,#9a7e2a,#6b5a1a)}
+.csn{color:var(--paper);font-weight:600}.csg{color:var(--gray);font-size:.65rem}
+#scene{position:fixed;top:48px;left:250px;right:0;bottom:0;background:var(--bg);overflow:hidden;transition:left .3s}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:all .6s}
+.bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 15%,rgba(20,15,10,.85) 100%)}
+.bg.ch0{filter:sepia(.5) contrast(1.1) brightness(.55) saturate(.7)}
+.bg.ch1{filter:sepia(.2) contrast(1.2) brightness(.6) saturate(.6) hue-rotate(-10deg)}
+.bg.ch2{filter:sepia(.4) contrast(1.15) brightness(.65) saturate(.8) hue-rotate(10deg)}
+.bg.ch3{filter:contrast(1.3) brightness(.5) saturate(.5) hue-rotate(-20deg)}
+.bg.ch4{filter:contrast(1.1) brightness(.85) saturate(1.1)}
+.bg.ch4::after{background:radial-gradient(ellipse at 50% 40%,transparent 40%,rgba(10,20,40,.5) 100%)}
+.hp{position:absolute;width:48px;height:48px;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;animation:hpu 2.5s infinite}
+.hp::before{content:'';position:absolute;width:42px;height:42px;border:3px solid var(--gold);border-radius:50%;box-shadow:0 0 16px rgba(184,149,58,.5)}
+.hp::after{content:attr(data-i);font-size:1.2rem;z-index:1}
+.hp:hover::before{transform:scale(1.1);border-color:#fff}
+.hl{position:absolute;top:-22px;left:50%;transform:translateX(-50%);background:rgba(26,15,10,.9);color:var(--gold);padding:2px 7px;font-size:.68rem;white-space:nowrap;border-radius:3px;border:1px solid var(--gold);opacity:0;transition:opacity .3s;pointer-events:none}
+.hp:hover .hl{opacity:1}
+@keyframes hpu{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#rulebar{position:fixed;bottom:0;left:250px;right:0;background:linear-gradient(0deg,#0d0805,rgba(42,29,21,.97));border-top:3px solid var(--red);z-index:30;padding:.8rem 1.2rem;min-height:110px;transition:left .3s}
+.rb-h{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+.rb-l{font-size:.72rem;color:var(--red);letter-spacing:.12rem;font-weight:700;background:rgba(139,38,53,.2);padding:2px 8px;border-radius:3px}
+.rb-s{margin-left:auto;font-size:.78rem;color:var(--gold);font-weight:600}
+.rb-t{font-size:.95rem;color:var(--paper);line-height:1.8;font-style:italic;opacity:.95;white-space:pre-line}
+.sbs{position:fixed;right:10px;z-index:35;display:flex;flex-direction:column;gap:6px}
+.sb-b{width:42px;height:42px;border-radius:50%;color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid rgba(255,255,255,.2);transition:all .3s;box-shadow:0 3px 12px rgba(0,0,0,.4)}
+.sb-b:hover{transform:scale(1.1)}
+.sb-ar{bottom:72px;background:linear-gradient(135deg,#4a148c,#7b1fa2);animation:sbp 2s infinite}
+.sb-lk{bottom:124px;background:linear-gradient(135deg,#f57c00,#ff9800)}
+.sb-da{bottom:176px;background:linear-gradient(135deg,#1565c0,#42a5f5)}
+.sb-en{bottom:228px;background:linear-gradient(135deg,#7b1fa2,#ab47bc)}
+@keyframes sbp{0%{box-shadow:0 0 0 0 rgba(74,20,140,.5)}70%{box-shadow:0 0 0 14px rgba(74,20,140,0)}100%{box-shadow:0 0 0 0 rgba(74,20,140,0)}}
+.cc{background:linear-gradient(135deg,rgba(244,232,208,.08),rgba(232,217,184,.03));border:2px solid var(--gold);padding:1rem;margin:.6rem 0;position:relative;border-radius:6px}
+.cc::before{content:'TOP SECRET';position:absolute;top:-9px;left:.7rem;background:var(--red);color:#fff;font-size:.58rem;padding:2px 7px;letter-spacing:.1rem;font-weight:700}
+.cc h4{color:var(--gold);margin-bottom:.5rem}
+.tr{background:linear-gradient(135deg,#0d260d,#1a3a1a);border:2px solid var(--gold-l);color:var(--paper);padding:1rem;margin-top:.6rem;line-height:1.9;border-radius:6px}
+.tr h4{color:var(--gold-l);margin-bottom:.5rem}
+.hi{width:100%;border-radius:5px;margin:.6rem 0;border:2px solid var(--gold-l);box-shadow:0 4px 10px rgba(0,0,0,.4);cursor:pointer;transition:transform .3s}
+.hi:hover{transform:scale(1.02)}
+.hc{text-align:center;color:var(--gray);font-size:.72rem;margin-top:-.3rem;margin-bottom:.6rem;font-style:italic}
+.qz{background:rgba(244,232,208,.04);border:2px solid var(--red);padding:1rem;margin:.6rem 0;border-radius:6px}
+.qz-q{font-size:.95rem;color:var(--gold);margin-bottom:.8rem;font-weight:600;line-height:1.7}
+.qz-o{display:flex;flex-direction:column;gap:.5rem}
+.qo{background:rgba(244,232,208,.05);border:2px solid var(--gray);color:var(--paper);padding:.7rem .9rem;cursor:pointer;font-family:inherit;font-size:.85rem;text-align:left;transition:all .2s;border-radius:4px}
+.qo:hover{background:rgba(184,149,58,.1);border-color:var(--gold)}
+.qo.ok{background:rgba(74,155,74,.12);border-color:var(--green);color:var(--green)}
+.qo.no{background:rgba(139,38,53,.12);border-color:var(--red);color:var(--red)}
+#dlg{position:fixed;bottom:120px;left:270px;right:12px;background:linear-gradient(180deg,#1a0f0a,var(--panel));border:2px solid var(--gold);border-radius:8px;padding:1rem;z-index:38;display:none;max-height:280px;overflow-y:auto;box-shadow:0 8px 25px rgba(0,0,0,.5)}
+#dlg.open{display:block}
+.d-s{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem}
+.d-n{color:var(--gold);font-weight:700;font-size:.9rem}
+.d-r{color:var(--gray);font-size:.7rem}
+.d-t{color:var(--paper);line-height:1.7;margin-bottom:.8rem;font-size:.85rem}
+.d-ch{display:flex;flex-direction:column;gap:.4rem;padding-left:64px}
+.dc{background:rgba(244,232,208,.05);border:2px solid var(--gray);color:var(--paper);padding:.5rem .8rem;cursor:pointer;font-family:inherit;font-size:.8rem;text-align:left;transition:all .2s;border-radius:4px}
+.dc:hover{background:rgba(184,149,58,.12);border-color:var(--gold);transform:translateX(3px)}
+#aichat{position:fixed;top:56px;bottom:130px;left:270px;right:12px;background:linear-gradient(180deg,#1a0f0a,var(--panel));border:2px solid var(--gold);border-radius:8px;z-index:39;display:none;flex-direction:column;box-shadow:0 8px 25px rgba(0,0,0,.5)}
+#aichat.open{display:flex}
+.ac-h{display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;border-bottom:2px solid var(--gold);background:rgba(0,0,0,.2)}
+.ac-av{display:none}
+.ac-nm{color:var(--gold);font-weight:700;font-size:.9rem}
+.ac-st{color:var(--gray);font-size:.65rem}
+.ac-m{flex:1;overflow-y:auto;padding:.8rem;display:flex;flex-direction:column;gap:.6rem}
+.am{max-width:80%;padding:.8rem;border-radius:7px;line-height:1.7;font-size:.85rem;word-break:break-word}
+.am.u{align-self:flex-end;background:var(--gold);color:var(--ink);font-weight:500}
+.am.b{align-self:flex-start;background:rgba(244,232,208,.07);color:var(--paper);border:1px solid var(--gray)}
+.cb{display:inline-block;background:var(--red);color:#fff;font-size:.68rem;padding:2px 7px;border-radius:3px;margin-top:.4rem;cursor:pointer;font-weight:600}
+.cb:hover{background:var(--red-d)}
+.ac-i{border-top:2px solid var(--gold);padding:.7rem;background:rgba(0,0,0,.12)}
+.ac-cl{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem}
+.ac-cb{background:rgba(184,149,58,.1);border:1px solid var(--gold);color:var(--gold);padding:.25rem .6rem;font-size:.72rem;cursor:pointer;font-family:inherit;border-radius:3px}
+.ac-cb:hover{background:rgba(184,149,58,.25)}
+.ac-r{display:flex;gap:.4rem}
+.ac-inp{flex:1;background:rgba(244,232,208,.07);border:2px solid var(--gray);color:var(--paper);padding:.5rem .7rem;font-family:inherit;font-size:.85rem;border-radius:4px}
+.ac-inp:focus{outline:none;border-color:var(--gold)}
+.ac-sd{background:var(--gold);color:var(--ink);border:none;padding:.5rem 1rem;font-family:inherit;cursor:pointer;font-weight:700;border-radius:4px}
+.tp{display:flex;gap:3px;padding:.3rem 0}.tp span{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:tb 1.4s infinite ease-in-out both}
+.tp span:nth-child(2){animation-delay:.16s}.tp span:nth-child(3){animation-delay:.32s}
+@keyframes tb{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.8rem;max-width:680px;width:100%;margin:.8rem 0}
+.cc2{background:linear-gradient(135deg,rgba(244,232,208,.05),rgba(232,217,184,.02));border:2px solid var(--gray);border-radius:8px;padding:.8rem;cursor:pointer;transition:all .3s;text-align:center}
+.cc2:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 4px 16px rgba(184,149,58,.2)}
+.cc2 .cn{font-size:.72rem;color:var(--red);letter-spacing:.1rem;margin-bottom:.2rem}
+.cc2 .ct{font-size:.9rem;color:var(--gold);font-weight:700;margin-bottom:.15rem}
+.cc2 .cs2{color:var(--gray);font-size:.72rem}
+.sts{display:flex;gap:2rem;margin:1rem 0;justify-content:center}
+.st{text-align:center}.st .sv{font-size:1.8rem;font-weight:700;color:var(--gold)}.st .sl{font-size:.75rem;color:var(--gray)}
+#toast{position:fixed;top:56px;right:12px;z-index:60;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--ink);padding:.7rem 1rem;border-radius:5px;box-shadow:var(--sh);display:none;font-weight:600;font-size:.85rem;animation:ts .4s}
+#toast.open{display:block}
+@keyframes ts{from{transform:translateX(80px);opacity:0}to{transform:translateX(0);opacity:1}}
+#iv{position:fixed;inset:0;z-index:80;background:rgba(13,8,5,.95);display:none;align-items:center;justify-content:center;cursor:pointer}
+#iv.open{display:flex}
+#iv img{max-width:90%;max-height:90%;object-fit:contain;border:3px solid var(--gold);border-radius:5px}
+.ar-thumb{width:72px;height:72px;object-fit:cover;border-radius:5px;border:2px solid transparent;cursor:pointer;opacity:.4;transition:all .3s;flex-shrink:0}
+.ar-thumb:hover{opacity:.7}.ar-thumb.done{border-color:#4caf50;opacity:1;box-shadow:0 0 10px rgba(76,175,80,.3)}
+.ar-badge{padding:.2rem .5rem;background:rgba(206,147,216,.12);border:1px solid rgba(206,147,216,.25);color:#ce93d8;border-radius:10px;font-size:.75rem;display:inline-block;margin:.15rem}
+@media(max-width:768px){#archive{width:100%;transform:translateX(-100%)}#scene,#rulebar{left:0}#dlg,#aichat{left:8px;right:8px}#menu h1{font-size:2.5rem}.cg{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="menu">
+  <h1>寻境大庆</h1>
+  <div class="sub">—— 档案解谜 · 规则怪谈 ——</div>
+  <div class="sb"><b>【档案编号：DQ-1959-TOPSECRET】</b><br>你是一名中学生，在参观铁人纪念馆时，意外获得了一本来自1959年的异常档案手册。<br>手册中记载着10条"生存规则"，<br>每一条规则背后，都隐藏着改变中国命运的历史真相...<br><br><span style="color:var(--gold)">收集线索 → 破解规则 → 揭开真相 → 传承精神</span></div>
+  <div class="mb"><button class="btn btn-p" onclick="G.start()">开始调查</button><button class="btn" id="cb" style="display:none" onclick="G.go()">📂 继续调查</button><button class="btn" onclick="G.chSel()">📑 选择章节</button></div>
+  <div style="color:var(--gray);font-size:.72rem;margin-top:.4rem">v3.0 · 完整版 · 四章十规则</div>
+</div>
+<div id="game" class="hide">
+  <div id="topbar"><div style="display:flex;align-items:center;gap:.5rem"><button class="nv" onclick="G.home()">🏠</button><button class="nv" onclick="G.chSel()">📑</button><span class="tb-t" id="cht"></span></div><span class="tb-p" id="prg"></span></div>
+  <div id="archive"><div class="a-t">📁 档案袋</div><div class="a-c" id="ccnt"></div><div id="clist"></div></div>
+  <div id="scene"><div class="bg" id="sbg"></div><div id="hps"></div></div>
+  <div id="rulebar"><div class="rb-h"><div class="rb-l">【当前档案规则】</div><div class="rb-s" id="rs"></div></div><div class="rb-t" id="rt"></div></div>
+  <div id="dlg"></div>
+  <div id="aichat">
+    <div class="ac-h"><div class="ac-av" id="acav"></div><div><div class="ac-nm" id="acnm"></div><div class="ac-st">在线</div></div><div style="margin-left:auto;display:flex;gap:.3rem;align-items:center"><button class="btn btn-s" onclick="G.closeAI()">← 返回</button><button class="pn-c" style="position:static" onclick="G.closeAI()">×</button></div></div>
+    <div class="ac-m" id="acm"></div>
+    <div class="ac-i"><div class="ac-cl" id="acl"></div><div class="tp hide" id="atp"><span></span><span></span><span></span></div><div class="ac-r"><input class="ac-inp" id="acin" placeholder="输入你想问的问题..." onkeypress="if(event.key==='Enter')G.sendAI()"><button class="ac-sd" onclick="G.sendAI()">发送</button></div></div>
+  </div>
+  <div class="sbs"><div class="sb-b sb-en" onclick="G.showEng()">⚙️</div><div class="sb-b sb-da" onclick="G.showDash()">📊</div><div class="sb-b sb-lk" onclick="G.showLink()">🔗</div><div class="sb-b sb-ar" onclick="G.showAR()">📷</div></div>
+</div>
+<div class="ov" id="ov" onclick="if(event.target===this)G.cov()"><div class="pn"><div class="pn-h"><span id="ovt"></span></div><button class="pn-c" onclick="G.cov()">×</button><div class="pn-b" id="ovb"></div><div class="pn-f"><button class="btn btn-s" onclick="G.cov()">← 返回</button><button class="btn btn-s" onclick="G.cov();G.home()">🏠 主页</button></div></div></div>
+<div class="ov" id="ov-ch"><div class="pn" style="max-width:720px"><div class="pn-h">📑 选择章节</div><button class="pn-c" onclick="G.cov('ov-ch')">×</button><div class="pn-b"><div class="cg" id="chg"></div></div></div></div>
+<div class="ov" id="ov-dn"><div class="pn" style="text-align:center"><div class="pn-h"><span id="dnt"></span></div><button class="pn-c" onclick="G.cov('ov-dn')">×</button><div class="pn-b" id="dnb"></div></div></div>
+<div class="ov" id="ov-ed"><div class="pn" style="max-width:580px;text-align:center"><div class="pn-h">寻境大庆 · 调查完成</div><div class="pn-b" id="edb"></div></div></div>
+<div class="ov" id="ov-ar"><div class="pn" style="max-width:680px;max-height:88vh"><div class="pn-h" style="color:#ce93d8;border-color:rgba(206,147,216,.3)">📷 AR实景扫描</div><button class="pn-c" onclick="G.closeAR()">×</button><div class="pn-b" id="arb" style="padding:0"></div></div></div>
+<div class="ov" id="ov-da"><div class="pn" style="max-width:960px;max-height:88vh"><div class="pn-h" style="color:#42a5f5;border-color:rgba(66,165,245,.2)">📊 学习数据分析中心</div><button class="pn-c" onclick="G.cov('ov-da')">×</button><div class="pn-b" id="dab" style="padding:.5rem"></div></div></div>
+<div class="ov" id="ov-en"><div class="pn" style="max-width:760px;max-height:88vh"><div class="pn-h" style="color:#ab47bc;border-color:rgba(171,71,188,.2)">⚙️ 动态规则引擎</div><button class="pn-c" onclick="G.cov('ov-en')">×</button><div class="pn-b" id="enb"></div></div></div>
+<div class="ov" id="ov-lk"><div class="pn" style="max-width:460px;max-height:88vh"><div class="pn-h" style="color:#ff9800;border-color:rgba(255,152,0,.3)">🔗 AR联动 - 同步码</div><button class="pn-c" onclick="G.cov('ov-lk')">×</button><div class="pn-b" id="lkb"></div></div></div>
+<div id="iv" onclick="this.classList.remove('open')"><img id="ivi" src=""><div style="position:absolute;bottom:1.5rem;color:var(--paper);font-size:.85rem;text-align:center;max-width:80%" id="ivc"></div></div>
+<div id="toast"></div>
+<!-- GAME SCRIPT -->
+<script src="game.js"></script>
+</body>
+</html>
